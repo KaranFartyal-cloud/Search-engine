@@ -159,7 +159,7 @@ def bot():
     for seed_url in starting_urls:
         urls_to_crawl.put(seed_url)
     MAX_WORKERS = 10
-    CRAWL_LIMIT = 200
+    CRAWL_LIMIT = 10
     links_queue = Queue()
     visited_urls = set()
     stop_crawl = threading.Event()
@@ -189,14 +189,14 @@ def bot():
 
     print("all urls have been crawled")
 
-    with open('advanced_inverted_index.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    with open('../advanced_inverted_index.csv', 'w', newline='', encoding='utf-8') as csvfile:
         fieldnames = ['word', 'doc_ids']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         for word, doc_ids in index.items():
             writer.writerow({'word': word, 'doc_ids': list(doc_ids)})
 
-    with open('advanced_doc_info.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    with open('../advanced_doc_info.csv', 'w', newline='', encoding='utf-8') as csvfile:
         fieldnames = ['doc_id', 'url', 'title', 'description']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()

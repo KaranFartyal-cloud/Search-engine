@@ -1,0 +1,65 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    padding: 30px 30px;
+}
+
+.input-div {
+    width: 100%;
+}
+
+.input-div input {
+    position: relative;
+    width: 65%;
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid black;
+    padding: 0 20px;
+}
+
+.input-div input:focus {
+    outline: none;
+}
+
+.input-div img {
+    position: absolute;
+    right: 35%;
+    top : 4.3%;
+    height:20px;
+}
+
+ul {
+   
+  list-style-type: none; /* Removes the bullets */
+  padding: 0;            /* Removes default indentation */
+  margin: 0;             /* Removes default spacing */
+}
+
+.links-container {
+    margin-top: 50px;
+    display: flex ;
+    flex-direction: column;
+    gap: 25px;
+}
+
+li {
+    position: relative;
+}
+
+li::after {
+    bottom: -10px;
+    position: absolute;
+    content: "";
+    width: 100%;
+    border-bottom: 1px solid rgb(206, 206, 206);
+}
+
+.links {
+    display: flex ;
+    flex-direction: column;
+    
+
+}

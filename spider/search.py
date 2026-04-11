@@ -70,7 +70,7 @@ def search() :
         if word in inverted_index:
             matched_doc_ids.update(inverted_index[word])
 
-    print(matched_doc_ids)
+  
 
     if not matched_doc_ids:
         return []
@@ -94,3 +94,4 @@ load_document_info('advanced_doc_info.csv')
 load_inverted_index('advanced_inverted_index.csv')
 
 results = search()
+print(json.dumps(results, indent=4))
