@@ -6,10 +6,13 @@ import threading
 import time
 import random
 from indexPage import index_page
-import csv
 from urllib.parse import urlparse
+import utils 
 
 # can_crawl respects robots.txt of the website
+
+# right now can_crawl is inefficient because it fetches robots.txt even for it's subdomain
+# we gotta cache it somehow.
 
 def can_crawl(url):
     parsed_url = urlparse(url)
@@ -159,7 +162,7 @@ def bot():
     for seed_url in starting_urls:
         urls_to_crawl.put(seed_url)
     MAX_WORKERS = 10
-    CRAWL_LIMIT = 10
+    CRAWL_LIMIT = 5
     links_queue = Queue()
     visited_urls = set()
     stop_crawl = threading.Event()
@@ -189,23 +192,21 @@ def bot():
 
     print("all urls have been crawled")
 
-    with open('../advanced_inverted_index.csv', 'w', newline='', encoding='utf-8') as csvfile:
-        fieldnames = ['word', 'doc_ids']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        for word, doc_ids in index.items():
-            writer.writerow({'word': word, 'doc_ids': list(doc_ids)})
+   #inserting into postgres database
 
-    with open('../advanced_doc_info.csv', 'w', newline='', encoding='utf-8') as csvfile:
-        fieldnames = ['doc_id', 'url', 'title', 'description']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        for doc_id, info in webpage_info.items():
-            writer.writerow({
-                'doc_id': doc_id,
-                'url': info['url'],
-                'title': info['title'],
-                'description': info['description']
-            })
+    data = [
+        (word, list(doc_ids)) for word, doc_ids in index.items()
+    ]
+    print('this is data,' , data)
+    utils.helper.insert_many_inverted_index(data)
+    
+       
+    data = [
+        (info['url'], info['title'], info['description'])
+        for info in webpage_info.values()
+    ]
+    print('this is data,' , data)
+
+    utils.helper.insert_many_doc_info(data)
 
 bot()
